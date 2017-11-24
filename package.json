@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-decompose",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Split up a compose for HMR",
   "repository": "Omniroot/babel-plugin-decompose",
   "license": "MIT",
