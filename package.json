@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Split up a compose for HMR",
   "repository": "Omniroot/babel-plugin-decompose",
+  "license": "MIT",
   "author": "Tzvi Melamed <tzvi@melamed.biz>",
   "main": "lib/index.js",
   "devDependencies": {

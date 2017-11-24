@@ -4,7 +4,7 @@ export default function({types: t }) {
       ExportDefaultDeclaration: (path) => {
         
         const {declaration} = path.node;
-        console.log(declaration.type);
+
         if (!t.isCallExpression(declaration)) {
           return;
         }
