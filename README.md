@@ -17,13 +17,21 @@ export default compose(
 **Out**
 
 ```js
-const _decomposed = graphql(...)(MyClass);
+const _decomposed = MyClass;
 
-const _decomposed2 = withTranslation()(_decomposed);
+const _decomposed2 = graphql(...);
 
-const _decomposed3 = withRouter(_decomposed2);
+const _decomposed3 = _decomposed2(_decomposed);
 
-export default _decomposed3;
+const _decomposed4 = withTranslation();
+
+const _decomposed5 = _decomposed4(_decomposed3);
+
+const _decomposed6 = withRouter;
+
+const _decomposed7 = _decomposed6(_decomposed5);
+
+export default _decomposed7;
 ```
 
 ## Installation

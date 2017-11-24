@@ -1,5 +1,11 @@
-const _decomposed = withTranslation()(MyClass);
+const _decomposed = MyClass;
 
-const _decomposed2 = withRouter(_decomposed);
+const _decomposed2 = withTranslation();
 
-export default _decomposed2;
+const _decomposed3 = _decomposed2(_decomposed);
+
+const _decomposed4 = withRouter;
+
+const _decomposed5 = _decomposed4(_decomposed3);
+
+export default _decomposed5;

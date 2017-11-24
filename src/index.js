@@ -3,13 +3,13 @@ export default function({types: t }) {
     visitor: {
       ExportDefaultDeclaration: (path) => {
         
-        const {declaration} = path.node;
+        const {declaration: visitee} = path.node;
 
-        if (!t.isCallExpression(declaration)) {
+        if (!t.isCallExpression(visitee)) {
           return;
         }
         
-        const {callee, arguments: componentNode} = declaration;
+        const {callee, arguments: componentNode} = visitee;
 
         if (!t.isCallExpression(callee)) {
           return;
@@ -18,27 +18,33 @@ export default function({types: t }) {
         const {callee: compose, arguments: args} = callee;
         args.reverse();
         
-        let lastID = path.scope.generateUidIdentifier('decomposed');
-        let last = t.callExpression(args[0], componentNode);
+        let lastValID = path.scope.generateUidIdentifier('decomposed');
+        let declarator = t.variableDeclarator(lastValID, componentNode[0]);
+        let declaration = t.variableDeclaration('const', [declarator]);
+        const nodes = [
+          declaration
+        ];
 
-        const nodes = [];
+        for (let i = 0; i < args.length; i++) {
+          // compose func
+          const funcID = path.scope.generateUidIdentifier('decomposed');
+          declarator = t.variableDeclarator(funcID, args[i]);
+          declaration = t.variableDeclaration('const', [declarator]);
 
-        for (let i = 1; i < args.length; i++) {
-          const declarator = t.variableDeclarator(lastID, last);
-          const declaration = t.variableDeclaration('const', [declarator]);
+          // push func
           nodes.push(declaration);
-          
-          last = t.callExpression(args[i], [lastID]);
-          lastID = path.scope.generateUidIdentifier('decomposed');
+
+          // compose val
+          const temp = t.callExpression(funcID, [lastValID]);
+          lastValID = path.scope.generateUidIdentifier('decomposed');
+          declarator = t.variableDeclarator(lastValID, temp);
+          declaration = t.variableDeclaration('const', [declarator]);
+
+          // push val
+          nodes.push(declaration);
         }
 
-
-        const finalID = lastID;
-        const finalDeclarator = t.variableDeclarator(finalID, last);
-        const finalDeclaration = t.variableDeclaration('const', [finalDeclarator]);
-        nodes.push(finalDeclaration);
-
-        nodes.push(t.exportDefaultDeclaration(finalID));
+        nodes.push(t.exportDefaultDeclaration(lastValID));
 
         path.replaceWithMultiple(nodes);
       }
