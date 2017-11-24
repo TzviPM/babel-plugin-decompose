@@ -1,5 +1,5 @@
-"use strict";
+const _decomposed = withTranslation()(MyClass);
 
-const _decompose = withTranslation()(MyClass);
-const _decompose2 = withRouter(_decompose);
-export default _decompose2;
+const _decomposed2 = withRouter(_decomposed);
+
+export default _decomposed2;
